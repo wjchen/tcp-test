@@ -20,15 +20,15 @@ int main(int argc, char**argv)
   socklen_t clilen;
   pid_t     childpid;
   char mesg[1000];
-
+  
+  if(argc >= 2 && strlen(argv[1]) <= MAX_DEV_NAME_LEN)
+    strncpy(dev_name,argv[1],strlen(argv[1]));
+  
   if(init_eth_reader())
   {
     fprintf(stderr,"eth reader init failed\n");
     return -1;
   }
-
-  if(argc >= 3 && strlen(argv[2]) <= MAX_DEV_NAME_LEN)
-    strncpy(dev_name,argv[2],strlen(argv[2]));
 
   start_timer();
   pthread_create(&thread_eth_reader, NULL, &eth_reader, NULL);

@@ -142,7 +142,7 @@ int init_eth_reader()
   
   if(phandle == NULL) return -1;
 
-  if(pcap_compile(phandle,&fp,filter_exp,1000,PCAP_NETMASK_UNKNOWN) == -1)
+  if(pcap_compile(phandle,&fp,filter_exp,1,PCAP_NETMASK_UNKNOWN) == -1)
   {
     fprintf(stderr,"parse filter failed %s:%s\n",filter_exp,pcap_geterr((pcap_t*)errbuf));
     return -1;

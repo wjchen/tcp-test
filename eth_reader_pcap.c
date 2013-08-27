@@ -95,6 +95,7 @@ int choose_and_open()
     else
       printf(" (No description available)\n\n");
   }
+
   printf("Pls choose a device:\n");
   if(fgets(buf,9,stdin) == NULL)return -1;
   int ch = atoi(buf);
@@ -103,8 +104,12 @@ int choose_and_open()
   {
     i++;
     if(i == ch)
+    {
       phandle = pcap_open_live(d->name,BUFSIZ,0,1,errbuf);
+      break;
+    }
   }
+
   pcap_freealldevs(alldevs);
   return 0;
 }
@@ -163,3 +168,4 @@ void* eth_reader(void* arg)
   
   pcap_close(phandle);
 }
+

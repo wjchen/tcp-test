@@ -99,8 +99,7 @@ int choose_and_open()
   printf("Pls choose a device:\n");
   if(fgets(buf,9,stdin) == NULL)return -1;
   int ch = atoi(buf);
-  i = 0;
-  for(d = alldevs; d != NULL; d = d->next)
+  for(i = 0, d = alldevs; d != NULL; d = d->next)
   {
     i++;
     if(i == ch)

@@ -52,6 +52,17 @@ int main(int argc, char**argv)
   getsockname(sockfd, (struct sockaddr *)&addr, &addr_len);
   src_port = ntohs(addr.sin_port);
   memcpy(src_addr,(char *)&addr.sin_addr,4);
+
+#ifdef _CLIENT_
+  fd_set rfds;
+  struct timeval timeout;
+  timeout.tv_sec=1;
+  timeout.tv_usec=0;
+  FD_ZERO(&rfds);
+  FD_SET(sockfd, &rfds);
+  select(sockfd + 1, &rfds, NULL, NULL, &timeout);
+#endif
+
   unsigned int seq = get_tcp_info(src_addr,src_port);
   int count = 0;
   while(seq == 0)
@@ -64,6 +75,7 @@ int main(int argc, char**argv)
     }
     seq = get_tcp_info(src_addr,src_port);
   }
+
   char *key = "a tcp test";
   struct rc4_state S_box;
   unsigned char key_new[16]={0};

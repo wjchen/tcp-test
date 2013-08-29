@@ -9,8 +9,8 @@ int key_gen(char *key,unsigned char out[16],unsigned int salt)
   MD5_CTX ctx;
   MD5_Init(&ctx);
   //int len = strlen(key);
-  //unsigned char data[len+40];
-  unsigned char *data = (unsigned char *)malloc(strlen(key)+40);
+  //char data[len+40];
+  char *data = (char *)malloc(strlen(key)+40);
   sprintf(data,"%u14%saI%s",salt,_VERSION_H,key);
   MD5_Update(&ctx, (void *)data, strlen(data));
   free(data);

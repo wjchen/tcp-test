@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pcap.h>
+#include <arpa/inet.h>
 #include "info_list.h"
 #include "eth_reader.h"
 
@@ -14,7 +15,6 @@ char dev_name[MAX_DEV_NAME_LEN+1] = {0};
 
 void callback(u_char * user, const struct pcap_pkthdr * pkthdr, const u_char * packet)
 {
-  int i;
   int eth_header_len;
   if(packet==NULL)
   {
@@ -46,7 +46,7 @@ void callback(u_char * user, const struct pcap_pkthdr * pkthdr, const u_char * p
 
   connection_info_t info;
   u_char *p,*ipheader;
-  ipheader = (char *)packet + eth_header_len;
+  ipheader = (unsigned char *)packet + eth_header_len;
 
   p = ipheader + IPPORT_OFFSET;
   memcpy((char *)&info.src_port,p,2);
@@ -117,6 +117,7 @@ int init_eth_reader()
 {
   char errbuf[PCAP_ERRBUF_SIZE];
   struct bpf_program fp;
+  init_tcp_info();
 
   if(PORT > 65535 || PORT < 0)return -1;
 #ifdef _CLIENT_
@@ -166,5 +167,7 @@ void* eth_reader(void* arg)
   pcap_loop(phandle,0,callback,&datalink);
   
   pcap_close(phandle);
+  return NULL;
 }
+
 

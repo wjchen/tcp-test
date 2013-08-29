@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <linux/if_ether.h>
 #include <linux/in.h>
+#include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include <linux/filter.h>
 #include <netpacket/packet.h>
@@ -18,6 +19,7 @@ int sock;
 
 int init_eth_reader()
 {
+  init_tcp_info();
   if((sock = socket(PF_PACKET, SOCK_DGRAM, htons(ETH_P_IP))) < 0)
   {
     fprintf(stderr, "create socket error\n");

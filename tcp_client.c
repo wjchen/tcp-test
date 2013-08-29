@@ -1,8 +1,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 #include "eth_reader.h"
 #include "key_gen.h"
 #include "info_list.h"
@@ -20,10 +23,10 @@ unsigned int seq;
 int main(int argc, char**argv)
 {
   int sockfd,n;
-  struct sockaddr_in servaddr,cliaddr;
+  struct sockaddr_in servaddr;
 
-  char sendline[1000];
-  char recvline[1000];
+  unsigned char sendline[1000];
+  unsigned char recvline[1000];
   if (argc < 2)
   {
      printf("client %s usage:  client <IP address> [eth name]\n",_VERSION_H);
@@ -83,10 +86,10 @@ int main(int argc, char**argv)
     return -1;
   rc4_init(&S_box,key_new,16);
 
-  while (fgets(sendline, 1000,stdin) != NULL)
+  while (fgets((char*)sendline, 1000,stdin) != NULL)
   {
-    int len = strlen(sendline);
-    rc4_crypt(S_box,sendline,sendline,strlen(sendline));
+    int len = strlen((char *)sendline);
+    rc4_crypt(S_box,sendline,sendline,strlen((char *)sendline));
     sendto(sockfd,sendline,len,0,
            (struct sockaddr *)&servaddr,sizeof(servaddr));
     n = recvfrom(sockfd,recvline,1000,0,NULL,NULL);
@@ -94,4 +97,6 @@ int main(int argc, char**argv)
     recvline[n] = 0;
     fprintf(stderr,"%s\n",recvline);
   }
+  return 0;
 }
+

@@ -14,6 +14,6 @@ typedef struct connection_info_s
 
 extern int push_tcp_info(connection_info_t);
 extern unsigned int get_tcp_info(unsigned char *,unsigned short);
-
+extern void init_tcp_info();
 
 #endif

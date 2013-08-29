@@ -1,5 +1,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include "eth_reader.h"
@@ -19,7 +21,7 @@ int main(int argc, char**argv)
   struct sockaddr_in servaddr,cliaddr;
   socklen_t clilen;
   pid_t     childpid;
-  char mesg[1000];
+  unsigned char mesg[1000];
   
   if(argc >= 2 && strlen(argv[1]) <= MAX_DEV_NAME_LEN)
     strncpy(dev_name,argv[1],strlen(argv[1]));
@@ -66,7 +68,7 @@ int main(int argc, char**argv)
     }
     char *key = "a tcp test";
     unsigned char key_new[16]={0};
-    struct rc4_state S_box, state;
+    struct rc4_state S_box;
     
     if(key_gen(key,key_new,seq) < 0)
       return -1;

@@ -1,9 +1,15 @@
 #include <stdio.h>
+#include <string.h>
 #include "info_list.h"
 #include "timer.h"
 
 //mutex needed?
-connection_info_t info_list[1024] = {0};
+connection_info_t info_list[1024];
+
+void init_tcp_info()
+{
+  memset(info_list,0,sizeof(info_list));
+}
 
 #ifdef _CLIENT_
 int push_tcp_info(connection_info_t info)  // client dst port
